@@ -32,6 +32,7 @@ def convert_front_matter(front_data, post_date, url):
 replace_regex_list = [
 #    (re.compile(r'^```(.*?)\n(.*?)\n```', re.DOTALL), r'{{< highlight \1 >}}\n\2\n{{< /highlight >}}'),
     (re.compile(r'<!--\smore\s-->'), '<!--more-->'),
+    (re.compile(r'\{%\sraw\s%\}(.*)\{%\sendraw\s%\}'), r'\1')
 ]
 
 

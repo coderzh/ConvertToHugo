@@ -10,6 +10,10 @@ import argparse
 __author__ = 'coderzh'
 
 
+class MyDumper(yaml.Dumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super(MyDumper, self).increase_indent(flow, False)
+
 content_regex = re.compile(r'---([\s\S]*?)---([\s\S]*)')
 
 
@@ -46,7 +50,7 @@ def convert_body_text(body_text):
 
 def write_out_file(front_data, body_text, out_file_path):
     out_lines = ['---']
-    front_string = yaml.dump(front_data, width=1000, default_flow_style=False, allow_unicode=True)
+    front_string = yaml.dump(front_data, width=1000, default_flow_style=False, allow_unicode=True, Dumper=MyDumper)
     out_lines.extend(front_string.splitlines())
     out_lines.append('---')
     out_lines.extend(body_text.splitlines())

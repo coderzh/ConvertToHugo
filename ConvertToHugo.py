@@ -66,7 +66,7 @@ def parse_from_filename(filename):
     if m:
         slug = m.group(2)
         post_date = datetime.strptime(m.group(1), '%Y-%m-%d')
-        return post_date, '/%s/%s' % (post_date.strftime('%Y/%m/%d'), slug)
+        return post_date, '/%s/%s/' % (post_date.strftime('%Y/%m/%d'), slug)
     return None, '/' + slug
 
 

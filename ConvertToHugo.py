@@ -18,8 +18,6 @@ content_regex = re.compile(r'---([\s\S]*?)---([\s\S]*)')
 
 
 def convert_front_matter(front_data, post_date, url):
-    if post_date:
-        front_data['date'] = post_date.strftime('%Y-%m-%d')
     front_data['url'] = url
 
     del front_data['layout']

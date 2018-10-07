@@ -10,12 +10,14 @@ import argparse
 __author__ = 'coderzh'
 
 
+class MyDumper(yaml.Dumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super(MyDumper, self).increase_indent(flow, False)
+
 content_regex = re.compile(r'---([\s\S]*?)---([\s\S]*)')
 
 
 def convert_front_matter(front_data, post_date, url):
-    if post_date:
-        front_data['date'] = post_date.strftime('%Y-%m-%d')
     front_data['url'] = url
 
     del front_data['layout']
@@ -46,7 +48,7 @@ def convert_body_text(body_text):
 
 def write_out_file(front_data, body_text, out_file_path):
     out_lines = ['---']
-    front_string = yaml.dump(front_data, width=1000, default_flow_style=False, allow_unicode=True)
+    front_string = yaml.dump(front_data, width=1000, default_flow_style=False, allow_unicode=True, Dumper=MyDumper)
     out_lines.extend(front_string.splitlines())
     out_lines.append('---')
     out_lines.extend(body_text.splitlines())
@@ -64,7 +66,7 @@ def parse_from_filename(filename):
     if m:
         slug = m.group(2)
         post_date = datetime.strptime(m.group(1), '%Y-%m-%d')
-        return post_date, '/%s/%s' % (post_date.strftime('%Y/%m/%d'), slug)
+        return post_date, '/%s/%s/' % (post_date.strftime('%Y/%m/%d'), slug)
     return None, '/' + slug
 
 

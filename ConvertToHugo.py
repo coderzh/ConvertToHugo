@@ -9,6 +9,10 @@ import argparse
 
 __author__ = 'coderzh'
 
+try:
+  basestring
+except NameError:
+  basestring = str
 
 class MyDumper(yaml.Dumper):
     def increase_indent(self, flow=False, indentless=False):
@@ -80,12 +84,12 @@ def convert_post(file_path, out_dir):
 
     m = content_regex.match(content)
     if not m:
-        print 'Error match content: %s' % file_path
+        print('Error match content: %s' % file_path)
         return False
 
-    front_data = yaml.load(m.group(1))
+    front_data = yaml.load(m.group(1), Loader=yaml.UnsafeLoader)
     if not front_data:
-        print 'Error load yaml: %s' % file_path
+        print('Error load yaml: %s' % file_path)
         return False
 
     '''
@@ -121,15 +125,15 @@ def convert(src_dir, out_dir):
                 rel_path = os.path.relpath(os.path.dirname(file_path), common_prefix)
                 real_out_dir = os.path.join(out_dir, rel_path)
                 if convert_post(file_path, real_out_dir):
-                    print 'Converted: %s' % file_path
+                    print('Converted: %s' % file_path)
                     count += 1
                 else:
                     error += 1
             except Exception as e:
                 error += 1
-                print 'Error convert: %s \nException: %s' % (file_path, e)
+                print('Error convert: %s \nException: %s' % (file_path, e))
 
-    print '--------\n%d file converted! %s' % (count, 'Error count: %d' % error if error > 0 else 'Congratulation!!!')
+    print('--------\n%d file converted! %s' % (count, 'Error count: %d' % error if error > 0 else 'Congratulation!!!'))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert Jekyll blog to GoHugo')
